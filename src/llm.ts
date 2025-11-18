@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.0-flash-exp";
+const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
 
 export async function callLLM(
   systemPrompt: string,
