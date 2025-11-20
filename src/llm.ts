@@ -24,7 +24,7 @@ export async function callLLM(
     ],
     generationConfig: {
       temperature: 0.2,
-      maxOutputTokens: 1500,
+      maxOutputTokens: 8192, // Changed from 1500 to 8192
       // Ask Gemini to return JSON only
       responseMimeType: "application/json"
       // No responseSchema here to avoid TS type mismatch
@@ -44,14 +44,11 @@ export function safeParseJSON(maybeJson: string): any {
     if (fenced && fenced[1] !== undefined) {
       return JSON.parse(fenced[1]);
     }
-
     // Try last JSON object in text
     const match = maybeJson.match(/\{[\s\S]*\}$/);
     if (match && match[0] !== undefined) {
       return JSON.parse(match[0]);
     }
-
     throw new Error("Model did not return valid JSON");
   }
 }
-
