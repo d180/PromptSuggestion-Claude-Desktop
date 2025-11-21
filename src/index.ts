@@ -8,6 +8,11 @@ import { AnalyzeDislikeOutput } from "./schema.js";
 import { buildUserPrompt } from "./prompt.js";
 import { callLLM, safeParseJSON } from "./llm.js";
 
+// Helper function to sleep/delay
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function main() {
   const app = express();
 
@@ -52,6 +57,10 @@ async function main() {
         return res.json(parsed);
       } catch (firstErr) {
         console.warn("⚠️ [/dev/analyze] first parse failed, retrying:", firstErr);
+
+        // Add delay before retry to avoid hitting rate limit again
+        console.log("⏳ Waiting 3 seconds before retry...");
+        await sleep(3000); // 3 second delay
 
         system =
           "STRICT JSON ONLY. Keys: summary, root_causes, suggested_prompt, alternatives, confidence. No extra text.";
